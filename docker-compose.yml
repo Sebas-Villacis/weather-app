@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  # Create frontend container
+  frontend:
+    container_name: frontend
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    ports:
+      - ${FRONTEND_PORT}:3000
+    # start container in interactive mode
+    stdin_open: true
+    tty: true
+    #restart: always
+    depends_on:
+      - backend
+    env_file:
+      - .env
+  # Create backend container
+  backend:
+    container_name: backend
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    ports:
+      - ${BACKEND_PORT}:3333
+    #restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+  # Create database container
+  db:
+    image: postgres:13
+    container_name: db
+    restart: always
+    ports:
+      - ${DB_PORT}:5432
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
