@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
-import * as argon from 'argon2';
+//import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 
@@ -15,7 +15,7 @@ export class AuthService {
   ) {}
   async signUp(dto: AuthDto) {
     // generate the password
-    const hash = await argon.hash(dto.password);
+    /* const hash = await argon.hash(dto.password);
     //save the new user in the db
     try {
       const user = await this.prismaService.user.create({
@@ -33,12 +33,12 @@ export class AuthService {
         }
       }
       throw error;
-    }
+    } */
   }
 
   async signIn(dto: AuthDto) {
     //find the user by email
-    const user = await this.prismaService.user.findUnique({
+    /* const user = await this.prismaService.user.findUnique({
       where: {
         email: dto.email,
       },
@@ -50,7 +50,7 @@ export class AuthService {
     //if password incorrect throw exception
     if (!pwMatches) throw new ForbiddenException('Credentials incorrect');
 
-    return this.signToken(user.id, user.email);
+    return this.signToken(user.id, user.email); */
   }
 
   async signToken(

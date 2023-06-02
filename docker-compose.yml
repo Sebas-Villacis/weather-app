@@ -6,12 +6,15 @@ services:
     build:
       context: ./apps/frontend
       dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ./apps/frontend:/app/frontend
+      - /app/frontend/node_modules
     ports:
       - ${FRONTEND_PORT}:3000
     # start container in interactive mode
     stdin_open: true
     tty: true
-    #restart: always
     depends_on:
       - backend
     env_file:
@@ -22,13 +25,21 @@ services:
     build:
       context: ./apps/backend
       dockerfile: Dockerfile
+      # Only will build development stage from our dockerfile
+      target: development
+    # Mount our host (backend) direcotry to the docker container
+    # reflect file changes from host to container
+    volumes:
+      - ./apps/backend:/app/backend
+      - /app/backend/node_modules
     ports:
       - ${BACKEND_PORT}:3333
-    #restart: always
     depends_on:
       - db
     env_file:
       - .env
+    # Run a command against the development stage of the image
+    command: npm run start:dev
   # Create database container
   db:
     image: postgres:13

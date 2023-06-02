@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { fetchData } from '../helpers/fetch';
 import { forecastType, optionType } from '../types';
+import { useDebounce } from './useDebounce';
 
 const useForecast = () => {
   const [term, setTerm] = useState<string>('');
@@ -8,21 +9,28 @@ const useForecast = () => {
   const [city, setCity] = useState<optionType | null>(null);
   const [forecast, setForecast] = useState<forecastType | null>(null);
 
-  const getOptions = async (value: string) => {
-    const url = `http://localhost:3333/geo/locations?q=${value.trim()}`;
-    const data = await fetchData(url);
-    console.log({
-      data,
-    });
-    setOptions(data);
-  };
+  const debouncedSearch = useDebounce(term, 500);
+
+  useEffect(() => {
+    const getOptions = async () => {
+      const url = `http://localhost:3333/geo/locations?q=${term}`;
+      const locations: any = await fetchData(url, {
+        signalKey: 'LOCATIONS_API',
+      });
+
+      console.log({
+        locations,
+      });
+      setOptions(locations.data);
+    };
+
+    if (debouncedSearch && !city) getOptions();
+  }, [debouncedSearch]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setTerm(value);
     if (value === '') return;
-
-    getOptions(value);
   };
 
   const onOptionSelect = (option: optionType) => {
@@ -36,19 +44,20 @@ const useForecast = () => {
     console.log({
       city,
     });
-    const data = await fetchData(
+    const forecastData: any = await fetchData(
       `http://localhost:3333/weather/forecast?lat=${city.latitude}&lon=${city.longitude}`,
     );
 
     const foreCastData = {
-      ...data.city,
-      list: data.list.slice(0, 16),
+      ...forecastData.data.city,
+      list: forecastData.data.list.slice(0, 16),
     };
     setForecast(foreCastData);
   };
 
   useEffect(() => {
     if (city) {
+      console.log('entra al usefect city');
       setTerm(city.name);
       setOptions([]);
     }
