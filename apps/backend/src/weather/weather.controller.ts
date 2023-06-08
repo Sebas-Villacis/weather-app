@@ -6,7 +6,6 @@ import { AuthenticatedGuard } from 'src/auth/guard';
 @Controller('weather')
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
-  @UseGuards(AuthenticatedGuard)
   @Get('forecast')
   getForecastData(@Query() params: ForecastDto) {
     return this.weatherService.getForecastData(
@@ -16,7 +15,6 @@ export class WeatherController {
     );
   }
 
-  @UseGuards(AuthenticatedGuard)
   @Get('current')
   getCurrentWeather(@Query() params: ForecastDto) {
     return this.weatherService.getCurrentWeather(
@@ -26,7 +24,6 @@ export class WeatherController {
     );
   }
 
-  @UseGuards(AuthenticatedGuard)
   @Get('near-cities')
   getNearbyCitiesWeather(@Query() params: ForecastCitiesDto) {
     return this.weatherService.getNearbyCitiesWeather(

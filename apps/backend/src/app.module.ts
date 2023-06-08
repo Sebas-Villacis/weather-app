@@ -29,17 +29,14 @@ import { WeatherModule } from './weather/weather.module';
           context: 'HTTP',
         }),
         autoLogging: false,
-        transport:
-          process.env.NODE_ENV === 'development'
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  messageKey: 'message',
-                  singleLine: true,
-                  colorize: true,
-                },
-              }
-            : undefined,
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            messageKey: 'message',
+            singleLine: true,
+            colorize: true,
+          },
+        },
         messageKey: 'message',
       },
     }),
