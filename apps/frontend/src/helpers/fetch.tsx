@@ -4,7 +4,7 @@ const ABORT_REQUEST_CONTROLLERS = new Map();
 
 export const fetchData = async (
   url: string,
-  { signalKey, ...rest }: { signalKey?: string; rest?: [] | object } = {},
+  { signalKey, ...rest }: any = {},
 ): Promise<fetchDataType> => {
   try {
     const response = await fetch(url, {
