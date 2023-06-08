@@ -1,23 +1,37 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { WeatherService } from './weather.service';
+import { ForecastCitiesDto, ForecastDto } from 'src/dto';
+import { AuthenticatedGuard } from 'src/auth/guard';
 
 @Controller('weather')
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
+  @UseGuards(AuthenticatedGuard)
   @Get('forecast')
-  getForecastData(@Query() params: any): any {
-    return this.weatherService.getForecastData(params.lat, params.lon);
-  }
-  @Get('current')
-  getCurrentWeather(@Query() params: any): any {
-    return this.weatherService.getCurrentWeather(params.lat, params.lon);
-  }
-  @Get('near-cities')
-  getNearbyCitiesWeather(@Query() params: any): any {
-    return this.weatherService.getNearbyCitiesWeather(
+  getForecastData(@Query() params: ForecastDto) {
+    return this.weatherService.getForecastData(
       params.lat,
       params.lon,
+      params.units,
+    );
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('current')
+  getCurrentWeather(@Query() params: ForecastDto) {
+    return this.weatherService.getCurrentWeather(
+      params.lat,
+      params.lon,
+      params.units,
+    );
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('near-cities')
+  getNearbyCitiesWeather(@Query() params: ForecastCitiesDto) {
+    return this.weatherService.getNearbyCitiesWeather(
       params.cityId,
+      params.units,
     );
   }
 }

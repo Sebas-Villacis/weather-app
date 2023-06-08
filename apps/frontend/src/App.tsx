@@ -16,7 +16,7 @@ const App = (): JSX.Element => {
   } = useForecast();
 
   return (
-    <main className="flex justify-center items-center bg-gradient-to-br from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% h-full w-full">
+    <main className="flex justify-center items-center bg-gradient-to-br from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% h-[100vh] w-full">
       {forecast ? (
         <Forecast data={forecast} optionSelected={city} />
       ) : (
@@ -28,15 +28,6 @@ const App = (): JSX.Element => {
           onSumbit={onSumbit}
         />
       )}
-      {/* <MapWrapper
-        city={{
-          name: 'City Of london',
-          country: 'United Kingdom',
-          latitude: 51.51988,
-          longitude: -0.09446,
-          wikiDataId: 'Q23311',
-        }}
-      /> */}
     </main>
   );
 };

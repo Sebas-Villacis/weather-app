@@ -1,13 +1,13 @@
-import { User } from '.prisma/client';
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { GetUser } from 'src/auth/decorator/get-user.decorator';
-import { JwtGuard } from 'src/auth/guard';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 
-@UseGuards(JwtGuard)
+import { AuthDto } from 'src/auth/dto';
+import { LocalAuthGuard } from 'src/auth/guard';
+
 @Controller('users')
 export class UserController {
-  @Get('me')
-  getMe(@GetUser() user: User) {
-    return user;
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  login(@Request() req): any {
+    return { msg: 'Logged in!' };
   }
 }

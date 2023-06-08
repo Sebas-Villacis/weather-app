@@ -49,3 +49,8 @@ export type citiesWindWeatherType = {
   lon: number;
   temp: number;
 };
+
+export type fetchDataType = {
+  [key: string]: any;
+  isAborted: boolean;
+};

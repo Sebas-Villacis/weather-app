@@ -2,5 +2,6 @@
 /**/build/
 /**/dist/
 .vscode
-/docker-data
-pgdata/
+pgdata
+.env
+.DS_Store

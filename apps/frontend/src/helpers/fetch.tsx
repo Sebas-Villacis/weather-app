@@ -1,9 +1,11 @@
+import { fetchDataType } from '../types';
+
 const ABORT_REQUEST_CONTROLLERS = new Map();
 
 export const fetchData = async (
   url: string,
   { signalKey, ...rest }: { signalKey?: string; rest?: [] | object } = {},
-) => {
+): Promise<fetchDataType> => {
   try {
     const response = await fetch(url, {
       ...(signalKey && { signal: abortAndGetSignalSafe(signalKey) }),
@@ -14,25 +16,17 @@ export const fetchData = async (
     }
     const json = await response.json();
     return { data: json, isAborted: false };
-  } catch (error: any) {
-    if (error.name === 'AbortError') {
-      return new Response(JSON.stringify({}), {
-        status: 499, // Client Closed Request
-        statusText: error.message || 'Client Closed Request',
-      });
-    }
-    return new Response(JSON.stringify({}), {
-      status: 599, // Network Connect Timeout Error
-      statusText: error.message || 'Network Connect Timeout Error',
-    });
+  } catch (error: unknown) {
+    console.log('There was an error', error);
+    return { data: [], isAborted: false };
   }
 };
 
-export function abortRequestSafe(key: any, reason = 'CANCELLED') {
+export function abortRequestSafe(key: string, reason = 'CANCELLED') {
   ABORT_REQUEST_CONTROLLERS.get(key)?.abort?.(reason);
 }
 
-function abortAndGetSignalSafe(key: any) {
+function abortAndGetSignalSafe(key: string) {
   abortRequestSafe(key); // abort previous request, if any
   const newController = new AbortController();
   ABORT_REQUEST_CONTROLLERS.set(key, newController);

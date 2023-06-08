@@ -10,8 +10,11 @@ import VectorSource from 'ol/source/Vector';
 import { Feature } from 'ol';
 import { Point } from 'ol/geom';
 
-import { optionType } from '../types';
+import { fetchDataType, optionType } from '../types';
 import { fetchData } from '../helpers/fetch';
+import Style from 'ol/style/Style';
+import Text from 'ol/style/Text';
+import VectorLayer from 'ol/layer/Vector';
 
 type Props = {
   city: optionType;
@@ -25,13 +28,13 @@ const MapWrapper = ({ city }: Props): JSX.Element => {
     async function getCitiesWeather() {
       const url = `http://localhost:3333/weather/near-cities?lat=${city.latitude}&lon=${city.longitude}&cityId=${city.wikiDataId}`;
 
-      const result: any = await fetchData(url);
+      const result: fetchDataType = await fetchData(url);
 
-      console.log({ result });
       return result.data;
     }
 
     if (shouldFetch.current) {
+      shouldFetch.current = false;
       const map = new Map({
         target: mapRef.current,
         layers: [
@@ -43,25 +46,20 @@ const MapWrapper = ({ city }: Props): JSX.Element => {
         ],
         view: new View({
           center: fromLonLat([city.longitude, city.latitude]), // City of London coordinates
-          zoom: 14,
+          zoom: 11,
         }),
       });
 
       const heatmapLayer = new HeatmapLayer({
         source: new VectorSource(),
         blur: 16,
-        radius: 12,
+        radius: 14,
       });
 
       map.addLayer(heatmapLayer);
-      console.log("I'm mounting!");
-      shouldFetch.current = false;
-      getCitiesWeather().then((data) => {
-        console.log({
-          data,
-        });
 
-        const features = data.map((city) => {
+      getCitiesWeather().then((data) => {
+        const features = data.map((city, idx: number) => {
           const { lon, lat, temp } = city;
           return new Feature({
             geometry: new Point(fromLonLat([lon, lat])),
@@ -71,11 +69,13 @@ const MapWrapper = ({ city }: Props): JSX.Element => {
         heatmapLayer.getSource().addFeatures(features);
       });
     }
-
-    //return () => map.setTarget('');
   }, [city]);
 
-  return <div ref={mapRef} style={{ width: '100%', height: '400px' }} />;
+  return (
+    <section className="flex">
+      <div ref={mapRef} style={{ width: '100%', height: '250px' }} />
+    </section>
+  );
 };
 
 export default MapWrapper;

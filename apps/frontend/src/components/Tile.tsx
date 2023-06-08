@@ -1,12 +1,12 @@
-import Feels from "./Icons/Feels";
-import Humidity from "./Icons/Humidity";
-import Pop from "./Icons/Pop";
-import Pressure from "./Icons/Pressure";
-import Visibility from "./Icons/Visibility";
-import Wind from "./Icons/Wind";
+import Feels from './Icons/Feels';
+import Humidity from './Icons/Humidity';
+import Pop from './Icons/Pop';
+import Pressure from './Icons/Pressure';
+import Visibility from './Icons/Visibility';
+import Wind from './Icons/Wind';
 
 type Props = {
-  icon: "wind" | "feel" | "humidity" | "visibility" | "pressure" | "pop";
+  icon: 'wind' | 'feel' | 'humidity' | 'visibility' | 'pressure' | 'pop';
   title: string;
   info: string | JSX.Element;
   description: string;
@@ -29,7 +29,7 @@ const Tile = ({ icon, title, info, description }: Props): JSX.Element => {
         <Icon /> <h4 className="ml-1 font-bold">{title}</h4>
       </div>
       <h3 className="mt-2 text-lg">{info}</h3>
-      <p className="text-xs fonr-bold">{description}</p>
+      <div className="text-xs fonr-bold">{description}</div>
     </article>
   );
 };

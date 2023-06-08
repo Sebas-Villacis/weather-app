@@ -2,8 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosResponse } from 'axios';
-import { response } from 'express';
 import { Observable, map } from 'rxjs';
+import { nearbyCitiesCoordType, locationType } from 'src/types';
 
 @Injectable()
 export class GeolocationService {
@@ -12,7 +12,7 @@ export class GeolocationService {
     private httpService: HttpService,
   ) {}
 
-  getGeolocationData(value: string): Observable<AxiosResponse<any>> {
+  getGeolocationData(value: string): Observable<Array<locationType>> {
     return this.httpService
       .get(
         `${this.configService.get(
@@ -28,7 +28,10 @@ export class GeolocationService {
       .pipe(map((response) => response.data.data));
   }
 
-  getCitiesNearCity(cityId: string, radius = 100) {
+  getCitiesNearCity(
+    cityId: string,
+    radius = 100,
+  ): Observable<Array<nearbyCitiesCoordType>> {
     return this.httpService
       .get(
         `${this.configService.get(

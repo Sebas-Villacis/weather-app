@@ -28,8 +28,8 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
   const today = data.list[0];
 
   return (
-    <div className="w-full  py-4 md:py-4 md:px-10 lg:px-24 h-full backdrop-blur-ls rounded drop-shadow-lg">
-      <div className="mx-auto w-full">
+    <div className="w-full md:max-w-[1000px] py-4 md:py-4 md:px-10 lg:px-24 h-full lg:h-auto bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg">
+      <div className="mx-auto w-[500px]">
         <section className="text-center">
           <h2 className="text-2xl font-black">
             {data.name}
@@ -42,8 +42,8 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
             {today.weather[0].main} {today.weather[0].description}
           </p>
           <p className="text-sm">
-            H: <Degree temp={Math.ceil(today.main.temp_max)} />
-            L: <Degree temp={Math.floor(today.main.temp_min)} />
+            H: <Degree temp={Math.ceil(today.main.temp_max)} /> L:{' '}
+            <Degree temp={Math.floor(today.main.temp_min)} />
           </p>
         </section>
 
@@ -77,7 +77,7 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
             <Sunset />
             <span className="mt-2">{getSunTime(data.sunset)}</span>
           </div>
-          {/* wind */}
+
           <Tile
             icon="wind"
             title="Wind"
@@ -86,7 +86,7 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
               Math.round(today.wind.deg),
             )}, gusts ${today.wind.gust.toFixed(1)} km/h`}
           />
-          {/* feels like */}
+
           <Tile
             icon="feel"
             title="Feels Like"
@@ -97,21 +97,21 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
                 : 'warmer'
             }`}
           />
-          {/* humidity */}
+
           <Tile
             icon="humidity"
             title="Humidity"
             info={`${today.main.humidity} %`}
             description={`${getHumidityValue(today.main.humidity)}`}
           />
-          {/* pop */}
+
           <Tile
             icon="pop"
             title="Precipitation"
             info={`${Math.round(today.pop * 1000)} %`}
             description={`${getPop(today.pop)}, clouds at ${today.clouds.all}%`}
           />
-          {/* pressure */}
+
           <Tile
             icon="pressure"
             title="Pressure"
@@ -120,7 +120,7 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
               Math.round(today.main.pressure) < 1013 ? 'Lower' : 'Higer'
             } than expected`}
           />
-          {/* visibility */}
+
           <Tile
             icon="visibility"
             title="Visibility"
@@ -128,9 +128,9 @@ const Forecast = ({ data, optionSelected }: Props): JSX.Element => {
             description={getVisibilityValue(today.visibility)}
           />
         </section>
-        <section className="flex w-full h-[400px] mt-4 pb-2 mb-5">
-          {optionSelected && <MapWrapper city={optionSelected} />}
-        </section>
+      </div>
+      <div className="mx-auto w-[500px]">
+        {optionSelected && <MapWrapper city={optionSelected} />}
       </div>
     </div>
   );

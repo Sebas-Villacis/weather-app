@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { fetchData } from '../helpers/fetch';
-import { forecastType, optionType } from '../types';
+import { fetchDataType, forecastType, optionType } from '../types';
 import { useDebounce } from './useDebounce';
 
 const useForecast = () => {
@@ -9,17 +9,13 @@ const useForecast = () => {
   const [city, setCity] = useState<optionType | null>(null);
   const [forecast, setForecast] = useState<forecastType | null>(null);
 
-  const debouncedSearch = useDebounce(term, 500);
+  const debouncedSearch: string = useDebounce(term, 500);
 
   useEffect(() => {
     const getOptions = async () => {
       const url = `http://localhost:3333/geo/locations?q=${term}`;
-      const locations: any = await fetchData(url, {
+      const locations: fetchDataType = await fetchData(url, {
         signalKey: 'LOCATIONS_API',
-      });
-
-      console.log({
-        locations,
       });
       setOptions(locations.data);
     };
@@ -34,39 +30,27 @@ const useForecast = () => {
   };
 
   const onOptionSelect = (option: optionType) => {
-    console.log('optionselected:', option);
     setCity(option);
   };
 
   const onSumbit = async () => {
     if (!city) return;
-    // forecastData;
-    console.log({
-      city,
-    });
-    const forecastData: any = await fetchData(
+    const forecastData: fetchDataType = await fetchData(
       `http://localhost:3333/weather/forecast?lat=${city.latitude}&lon=${city.longitude}`,
     );
 
-    const foreCastData = {
+    const data = {
       ...forecastData.data.city,
-      list: forecastData.data.list.slice(0, 16),
+      list: forecastData.data.list.slice(0, 20),
     };
-    setForecast(foreCastData);
+    setForecast(data);
   };
 
   useEffect(() => {
     if (city) {
-      console.log('entra al usefect city');
       setTerm(city.name);
       setOptions([]);
     }
-
-    /* return () => {
-      setTerm('');
-      setOptions([]);
-      setCity(null);
-    } */
   }, [city]);
 
   return {
