@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class SessionSerializer extends PassportSerializer {
-  serializeUser(user: User, done: (err: Error, user: User) => void): any {
+  serializeUser(user: any, done: (err: Error, user: any) => void): any {
     done(null, user);
   }
   deserializeUser(

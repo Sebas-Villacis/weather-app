@@ -10,6 +10,7 @@ export const fetchData = async (
     const response = await fetch(url, {
       ...(signalKey && { signal: abortAndGetSignalSafe(signalKey) }),
       ...rest,
+      credentials: 'include',
     });
     if (response.status === 499) {
       return { data: [], isAborted: true }; //aborted

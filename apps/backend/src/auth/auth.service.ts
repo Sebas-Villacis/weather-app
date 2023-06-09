@@ -17,7 +17,6 @@ export class AuthService {
     this.logger.log(`Validating user ...`);
     //find the user by email
     const user = await this.userService.findOne(username);
-    console.log({ user });
     // compare password
     const pwMatches = await bcrypt.compare(password, user.hash);
     if (user && pwMatches) {

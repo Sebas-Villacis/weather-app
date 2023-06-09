@@ -31,10 +31,8 @@ const Login = () => {
       body: JSON.stringify(data),
     });
 
-    console.log('login:', login);
     if (login && login.data.msg) {
       setAuthenticated(true);
-      console.log('entra al if');
     }
   };
 
