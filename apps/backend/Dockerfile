@@ -63,7 +63,7 @@ COPY --chown=node:node --from=build /app/backend/prisma ./prisma
 COPY --chown=node:node --from=build /app/backend/dist ./dist
 
 
-EXPOSE 3333
+EXPOSE ${BACKEND_PORT}
 # Start the server using the production build
 CMD [ "node", "dist/main.js" ]
 

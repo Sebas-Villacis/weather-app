@@ -14,7 +14,7 @@ async function bootstrap() {
   });
   app.use(
     session({
-      secret: 'keyboard',
+      secret: process.env.SESSION_COOKIE,
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: 3600000 },
@@ -31,6 +31,6 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  await app.listen(3333);
+  await app.listen(process.env.BACKEND_PORT);
 }
 bootstrap();
