@@ -6,7 +6,7 @@ services:
     build:
       context: ./apps/frontend
       dockerfile: Dockerfile
-      target: development
+      target: ${FRONTEND_ENV}
     volumes:
       - ./apps/frontend:/app/frontend
       - /app/frontend/node_modules
@@ -26,7 +26,7 @@ services:
       context: ./apps/backend
       dockerfile: Dockerfile
       # Only will build development stage from our dockerfile
-      target: development
+      target: ${BACKEND_ENV}
     # Mount our host (backend) direcotry to the docker container
     # reflect file changes from host to container
     volumes:
@@ -38,7 +38,8 @@ services:
       - db
     env_file:
       - .env
-    # Run a command against the development stage of the image
+    # Run a command against the development stage of the image (HOT RELOAD).
+    # Comment the command if you have set BACKEND_ENV as production
     command: npm run start:dev
   # Create database container
   db:
